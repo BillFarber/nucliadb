@@ -36,4 +36,6 @@ head -c 32 /dev/urandom | base64
     )
 
 
-settings = EncryptionSettings()
+settings = EncryptionSettings(
+    encryption_secret_key="6TGjSkvX6qkFOo/BJKl5OY1fwJoWnMaSVI7VOJjU07Y="
+)

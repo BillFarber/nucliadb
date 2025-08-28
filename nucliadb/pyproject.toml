@@ -73,6 +73,9 @@ dependencies = [
     "grpc-stubs",
     "aiodns>=3.0.0",
 
+    # MarkLogic client for external index provider
+    "marklogic-python-client",
+
     "types-orjson",
 
     "psycopg[binary,pool]",
@@ -137,6 +140,16 @@ nucliadb-dataset-upload = "nucliadb.train.upload:run"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore:Unknown config option*:pytest.PytestConfigWarning",
+    "ignore:Module already imported so cannot be rewritten*:pytest.PytestAssertRewriteWarning",
+    "ignore:datetime.datetime.utcnow*:DeprecationWarning",
+    "ignore:websockets.legacy is deprecated*:DeprecationWarning",
+    "ignore:websockets.server.WebSocketServerProtocol is deprecated*:DeprecationWarning",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

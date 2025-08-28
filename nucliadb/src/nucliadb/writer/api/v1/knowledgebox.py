@@ -118,19 +118,45 @@ async def create_kb(item: KnowledgeBoxConfig) -> tuple[str, str]:
     external_index_provider = knowledgebox_pb2.CreateExternalIndexProviderMetadata(
         type=knowledgebox_pb2.ExternalIndexProviderType.UNSET,
     )
-    if (
-        item.external_index_provider
-        and item.external_index_provider.type == ExternalIndexProviderType.PINECONE
-    ):
-        pinecone_api_key = item.external_index_provider.api_key
-        serverless_pb = to_pinecone_serverless_cloud_pb(item.external_index_provider.serverless_cloud)
-        external_index_provider = knowledgebox_pb2.CreateExternalIndexProviderMetadata(
-            type=knowledgebox_pb2.ExternalIndexProviderType.PINECONE,
-            pinecone_config=knowledgebox_pb2.CreatePineconeConfig(
-                api_key=pinecone_api_key,
-                serverless_cloud=serverless_pb,
-            ),
-        )
+    if item.external_index_provider:
+        if (
+            item.external_index_provider.type
+            == ExternalIndexProviderType.PINECONE
+        ):
+            pinecone_api_key = item.external_index_provider.api_key
+            serverless_pb = to_pinecone_serverless_cloud_pb(
+                item.external_index_provider.serverless_cloud
+            )
+            external_index_provider = (
+                knowledgebox_pb2.CreateExternalIndexProviderMetadata(
+                    type=knowledgebox_pb2.ExternalIndexProviderType.PINECONE,
+                    pinecone_config=knowledgebox_pb2.CreatePineconeConfig(
+                        api_key=pinecone_api_key,
+                        serverless_cloud=serverless_pb,
+                    ),
+                )
+            )
+        if (
+            item.external_index_provider.type
+            == ExternalIndexProviderType.MARKLOGIC
+        ):
+            marklogic_host = item.external_index_provider.host
+            marklogic_port = item.external_index_provider.port
+            marklogic_username = item.external_index_provider.username
+            marklogic_password = item.external_index_provider.password
+            marklogic_database = item.external_index_provider.database
+            external_index_provider = (
+                knowledgebox_pb2.CreateExternalIndexProviderMetadata(
+                    type=knowledgebox_pb2.ExternalIndexProviderType.MARKLOGIC,
+                    marklogic_config=knowledgebox_pb2.CreateMarkLogicConfig(
+                        host=marklogic_host,
+                        port=marklogic_port,
+                        username=marklogic_username,
+                        password=marklogic_password,
+                        database=marklogic_database,
+                    ),
+                )
+            )
 
     try:
         (kbid, slug) = await KnowledgeBox.create(

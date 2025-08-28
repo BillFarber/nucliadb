@@ -33,3 +33,20 @@ The process is simple and fast. Upon your first pull request, you will be prompt
 1. Install Python == 3.13 with a virtualenv with your prefered tool (pyenv, conda, pipenv,...)
 2. Install NucliaDB Dev Dependencies `make install`
 3. Run `pytest nucliadb/tests`
+
+
+Rebuild the Protos???
+Either:
+uv sync --reinstall-package nucliadb_protos --reinstall
+Or:
+make protos
+
+Install development dependencies:
+uv sync --group dev
+
+
+Running the tests:
+uv run python -m pytest nucliadb/tests --import-mode=importlib
+
+Running just the MarkLogic tests:
+uv run python -m pytest nucliadb/tests/nucliadb/integration/test_marklogic_kb.py --import-mode=importlib

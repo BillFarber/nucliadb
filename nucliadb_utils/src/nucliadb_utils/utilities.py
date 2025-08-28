@@ -50,6 +50,9 @@ from nucliadb_utils.settings import (
 )
 from nucliadb_utils.storages.settings import settings as extended_storage_settings
 from nucliadb_utils.store import MAIN
+from nucliadb_protos import knowledgebox_pb2 as kb_pb2
+
+from marklogic.client import Client
 
 if TYPE_CHECKING:  # pragma: no cover
     from nucliadb_utils.storages.local import LocalStorage
@@ -451,3 +454,13 @@ def get_pinecone() -> PineconeSession:
 
 def clean_pinecone():
     clean_utility(Utility.PINECONE_SESSION)
+
+
+def get_marklogic_client(
+    marklogic_config: kb_pb2.CreateMarkLogicConfig,
+) -> Client:
+    base_url = f"http://{marklogic_config.host}:{marklogic_config.port}"
+    return Client(
+        base_url,
+        digest=(marklogic_config.username, marklogic_config.password),
+    )

@@ -1,0 +1,52 @@
+# name: nucliadb-with-postgres
+# name: nucliadb-nidx-with-postgres
+name: nucliadb-withbinding-with-postgres
+
+services:
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-for-nucliadb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+
+  marklogic:
+    # image: "ml-docker-db-dev-tierpoint.bed-artifactory.bedford.progress.com/marklogic/marklogic-server-ubi-rootless:latest-12"
+    image: "progressofficial/marklogic-db"
+    platform: linux/amd64
+    environment:
+      - MARKLOGIC_INIT=true
+      - MARKLOGIC_ADMIN_USERNAME=admin
+      - MARKLOGIC_ADMIN_PASSWORD=admin
+    volumes:
+      - ./docker/marklogic/Logs:/var/opt/MarkLogic/Logs
+    ports:
+      - "8000-8004:8000-8004"
+
+
+  # nucliadb:
+  #   # image: nuclia/nucliadb:latest
+  #   # image: nucliadbphil:latest            # Fails -> "No module named 'nidx_binding'"
+  #   # image: nucliadbnidxphil:latest        # Fails -> "No module named 'nidx_binding'"
+  #   image: nucliadbwithbinding:latest     # This works
+  #   environment:
+  #     DRIVER: PG
+  #     PG_URL: postgresql://postgres:postgres@postgres-for-nucliadb:5432/postgres
+  #     DRIVER_PG_URL: postgresql://postgres:postgres@postgres-for-nucliadb:5432/postgres
+  #     NUA_API_KEY: <YOUR-NUA-API-KEY>
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     - nucliadb-standalone:/data
+
+volumes:
+  postgresql:
+  postgresql_data:
+  nucliadb-standalone:
