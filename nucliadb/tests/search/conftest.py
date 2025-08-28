@@ -17,18 +17,5 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-pytest_plugins = [
-    "pytest_docker_fixtures",
-    "tests.ndbfixtures.maindb",
-    "tests.ndbfixtures.processing",
-    "tests.ndbfixtures.standalone",
-    "tests.ingest.fixtures",  # should be refactored out
-    "tests.ndbfixtures.nidx",
-    "tests.ndbfixtures.search",
-    "nucliadb_utils.tests.fixtures",
-    "nucliadb_utils.tests.gcs",
-    "nucliadb_utils.tests.s3",
-    "nucliadb_utils.tests.azure",
-    "nucliadb_utils.tests.nats",
-    "nucliadb_utils.tests.asyncbenchmark",
-]
+
+# pytest_plugins definition moved to top-level conftest.py to comply with pytest requirements

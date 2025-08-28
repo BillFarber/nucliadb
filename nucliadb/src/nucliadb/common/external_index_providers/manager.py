@@ -23,7 +23,12 @@ import async_lru
 
 from nucliadb.common import datamanagers
 from nucliadb.common.external_index_providers.base import ExternalIndexManager
-from nucliadb.common.external_index_providers.pinecone import PineconeIndexManager
+from nucliadb.common.external_index_providers.marklogic import (
+    MarkLogicIndexManager,
+)
+from nucliadb.common.external_index_providers.pinecone import (
+    PineconeIndexManager,
+)
 from nucliadb.common.external_index_providers.settings import settings
 from nucliadb_protos.knowledgebox_pb2 import (
     ExternalIndexProviderType,
@@ -37,38 +42,79 @@ async def get_external_index_manager(
 ) -> Optional[ExternalIndexManager]:
     """
     Returns an ExternalIndexManager for the given kbid.
-    If for_rollover is True, the ExternalIndexManager returned will include the rollover indexes (if any).
+    If for_rollover is True, the ExternalIndexManager returned will include
+    the rollover indexes (if any).
     """
     metadata = await get_external_index_metadata(kbid)
-    if metadata is None or metadata.type != ExternalIndexProviderType.PINECONE:
-        # Only Pinecone is supported for now
+    if metadata is None:
         return None
 
-    api_key = get_endecryptor().decrypt(metadata.pinecone_config.encrypted_api_key)
     default_vectorset = await get_default_vectorset_id(kbid)
 
-    rollover_indexes = None
-    if for_rollover:
-        rollover_metadata = await get_rollover_external_index_metadata(kbid)
-        if rollover_metadata is not None:
-            rollover_indexes = dict(rollover_metadata.pinecone_config.indexes)
+    if metadata.type == ExternalIndexProviderType.PINECONE:
+        api_key = get_endecryptor().decrypt(
+            metadata.pinecone_config.encrypted_api_key
+        )
 
-    return PineconeIndexManager(
-        kbid=kbid,
-        api_key=api_key,
-        indexes=dict(metadata.pinecone_config.indexes),
-        upsert_parallelism=settings.pinecone_upsert_parallelism,
-        delete_parallelism=settings.pinecone_delete_parallelism,
-        upsert_timeout=settings.pinecone_upsert_timeout,
-        delete_timeout=settings.pinecone_delete_timeout,
-        default_vectorset=default_vectorset,
-        rollover_indexes=rollover_indexes,
-    )
+        rollover_indexes = None
+        if for_rollover:
+            rollover_metadata = await get_rollover_external_index_metadata(kbid)
+            if rollover_metadata is not None:
+                rollover_indexes = dict(
+                    rollover_metadata.pinecone_config.indexes
+                )
+
+        return PineconeIndexManager(
+            kbid=kbid,
+            api_key=api_key,
+            indexes=dict(metadata.pinecone_config.indexes),
+            upsert_parallelism=settings.pinecone_upsert_parallelism,
+            delete_parallelism=settings.pinecone_delete_parallelism,
+            upsert_timeout=settings.pinecone_upsert_timeout,
+            delete_timeout=settings.pinecone_delete_timeout,
+            default_vectorset=default_vectorset,
+            rollover_indexes=rollover_indexes,
+        )
+    elif metadata.type == ExternalIndexProviderType.MARKLOGIC:
+        password = get_endecryptor().decrypt(
+            metadata.marklogic_config.encrypted_password
+        )
+
+        rollover_indexes = None
+        if for_rollover:
+            rollover_metadata = await get_rollover_external_index_metadata(kbid)
+            if rollover_metadata is not None:
+                rollover_indexes = dict(
+                    rollover_metadata.marklogic_config.indexes
+                )
+
+        return MarkLogicIndexManager(
+            kbid=kbid,
+            host=metadata.marklogic_config.host,
+            port=metadata.marklogic_config.port,
+            username=metadata.marklogic_config.username,
+            password=password,
+            database=metadata.marklogic_config.database,
+            indexes=dict(metadata.marklogic_config.indexes),
+            upsert_parallelism=settings.marklogic_upsert_parallelism,
+            delete_parallelism=settings.marklogic_delete_parallelism,
+            upsert_timeout=settings.marklogic_upsert_timeout,
+            delete_timeout=settings.marklogic_delete_timeout,
+            default_vectorset=default_vectorset,
+            rollover_indexes=rollover_indexes,
+        )
+    else:
+        # Unsupported external index provider type
+        return None
 
 
 @async_lru.alru_cache(maxsize=None)
-async def get_external_index_metadata(kbid: str) -> Optional[StoredExternalIndexProviderMetadata]:
-    return await datamanagers.atomic.kb.get_external_index_provider_metadata(kbid=kbid)
+async def get_external_index_metadata(
+    kbid: str,
+) -> Optional[StoredExternalIndexProviderMetadata]:
+    return await datamanagers.atomic.kb.get_external_index_provider_metadata(
+        kbid=kbid
+    )
 
 
 @async_lru.alru_cache(maxsize=None)
@@ -80,7 +126,9 @@ async def get_default_vectorset_id(kbid: str) -> Optional[str]:
     """
     async with datamanagers.with_ro_transaction() as txn:
         vss = []
-        async for vs_id, vs_config in datamanagers.vectorsets.iter(txn, kbid=kbid):
+        async for vs_id, vs_config in datamanagers.vectorsets.iter(
+            txn, kbid=kbid
+        ):
             vss.append((vs_id, vs_config))
         if len(vss) == 0:
             # If there is nothing in the vectorsets key on maindb, we use the "__default__" vectorset as id.
@@ -98,4 +146,8 @@ async def get_rollover_external_index_metadata(
     kbid: str,
 ) -> Optional[StoredExternalIndexProviderMetadata]:
     async with datamanagers.with_ro_transaction() as txn:
-        return await datamanagers.rollover.get_kb_rollover_external_index_metadata(txn, kbid=kbid)
+        return (
+            await datamanagers.rollover.get_kb_rollover_external_index_metadata(
+                txn, kbid=kbid
+            )
+        )

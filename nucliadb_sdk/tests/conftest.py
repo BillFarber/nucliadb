@@ -12,7 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-pytest_plugins = [
-    "pytest_docker_fixtures",
-    "nucliadb_sdk.tests.fixtures",
-]
+# pytest_plugins definition moved to top-level conftest.py to comply with pytest requirements

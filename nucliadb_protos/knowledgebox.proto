@@ -24,6 +24,7 @@ message KnowledgeBoxID {
 enum ExternalIndexProviderType {
     UNSET = 0;
     PINECONE = 1;
+    MARKLOGIC = 2;
 }
 
 // Pinecone
@@ -55,11 +56,38 @@ message StoredPineconeConfig {
     PineconeServerlessCloud serverless_cloud = 3;
 }
 
+// MarkLogic
+message CreateMarkLogicConfig {
+    string host = 1;
+    int32 port = 2;
+    string username = 3;
+    string password = 4;
+    string database = 5;
+}
+
+message MarkLogicIndexMetadata {
+    string index_name = 1;
+    string index_uri = 2;
+    int32 vector_dimension = 3;
+    utils.VectorSimilarity similarity = 4;
+}
+
+message StoredMarkLogicConfig {
+    string host = 1;
+    int32 port = 2;
+    string username = 3;
+    string encrypted_password = 4;
+    string database = 5;
+    // vectorset id -> MarkLogicIndexMetadata
+    map<string, MarkLogicIndexMetadata> indexes = 6;
+}
+
 // External Index node provider
 message CreateExternalIndexProviderMetadata {
     ExternalIndexProviderType type = 1;
     oneof config {
         CreatePineconeConfig pinecone_config = 2;
+        CreateMarkLogicConfig marklogic_config = 3;
     }
 }
 
@@ -67,6 +95,7 @@ message StoredExternalIndexProviderMetadata {
     ExternalIndexProviderType type = 1;
     oneof config {
         StoredPineconeConfig pinecone_config = 2;
+        StoredMarkLogicConfig marklogic_config = 3;
     }
 }
 

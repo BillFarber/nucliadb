@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.9.2, <4"
 resolution-markers = [
     "python_full_version >= '3.13'",
@@ -1447,6 +1447,19 @@ wheels = [
 ]
 
 [[package]]
+name = "marklogic-python-client"
+version = "1.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+    { name = "requests-toolbelt" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cc/e7/79eef841f7da6c1332fb69b02173aa501db896908ac7b3d93b274b50655c/marklogic_python_client-1.3.0.tar.gz", hash = "sha256:603aeb2baf7e815a0f78955104bd29e32635f7469ca46a295034db3588bff72f", size = 16392, upload-time = "2025-08-06T18:24:33.718Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/19/f3/0bdaf97a14f011b3de6c606a54df6e7f267892c66efb1c392b7d0851ebe2/marklogic_python_client-1.3.0-py3-none-any.whl", hash = "sha256:d6351f7d39656fb69fb27ef0dd0850f33c47c74d4729f3ebe3dfe0412ddca2b1", size = 23778, upload-time = "2025-08-06T18:24:32.61Z" },
+]
+
+[[package]]
 name = "mmh3"
 version = "5.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1788,12 +1801,12 @@ nkeys = [
 
 [[package]]
 name = "nidx-binding"
-version = "6.7.1"
+version = "6.7.2"
 source = { editable = "nidx/nidx_binding" }
 
 [[package]]
 name = "nidx-protos"
-version = "6.7.1"
+version = "6.7.2"
 source = { editable = "nidx/nidx_protos" }
 
 [[package]]
@@ -1828,7 +1841,7 @@ wheels = [
 
 [[package]]
 name = "nucliadb"
-version = "6.7.1"
+version = "6.7.2"
 source = { editable = "nucliadb" }
 dependencies = [
     { name = "aiobotocore" },
@@ -1859,6 +1872,7 @@ dependencies = [
     { name = "idna" },
     { name = "jmespath" },
     { name = "jwcrypto" },
+    { name = "marklogic-python-client" },
     { name = "mmh3" },
     { name = "multidict" },
     { name = "nidx-protos" },
@@ -1924,6 +1938,7 @@ requires-dist = [
     { name = "idna", specifier = ">=3.3" },
     { name = "jmespath", specifier = ">=1.0.0" },
     { name = "jwcrypto", specifier = ">=1.5.6" },
+    { name = "marklogic-python-client" },
     { name = "mmh3", specifier = ">=3.0.0" },
     { name = "multidict", specifier = ">=6.0.4" },
     { name = "nidx-protos", editable = "nidx/nidx_protos" },
@@ -1965,7 +1980,7 @@ wheels = [
 
 [[package]]
 name = "nucliadb-dataset"
-version = "6.7.1"
+version = "6.7.2"
 source = { editable = "nucliadb_dataset" }
 dependencies = [
     { name = "aiohttp" },
@@ -1998,7 +2013,7 @@ requires-dist = [
 
 [[package]]
 name = "nucliadb-models"
-version = "6.7.1"
+version = "6.7.2"
 source = { editable = "nucliadb_models" }
 dependencies = [
     { name = "pydantic" },
@@ -2009,7 +2024,7 @@ requires-dist = [{ name = "pydantic", specifier = ">=2.6,!=2.11.5,!=2.11.6" }]
 
 [[package]]
 name = "nucliadb-protos"
-version = "6.7.1"
+version = "6.7.2"
 source = { editable = "nucliadb_protos" }
 dependencies = [
     { name = "mypy-protobuf" },
@@ -2026,7 +2041,7 @@ requires-dist = [
 
 [[package]]
 name = "nucliadb-sdk"
-version = "6.7.1"
+version = "6.7.2"
 source = { editable = "nucliadb_sdk" }
 dependencies = [
     { name = "httpx" },
@@ -2047,7 +2062,7 @@ requires-dist = [
 
 [[package]]
 name = "nucliadb-telemetry"
-version = "6.7.1"
+version = "6.7.2"
 source = { editable = "nucliadb_telemetry" }
 dependencies = [
     { name = "orjson" },
@@ -2211,7 +2226,7 @@ provides-extras = ["otel", "grpc", "nats", "fastapi", "all"]
 
 [[package]]
 name = "nucliadb-utils"
-version = "6.7.1"
+version = "6.7.2"
 source = { editable = "nucliadb_utils" }
 dependencies = [
     { name = "aiohttp" },
@@ -2286,7 +2301,7 @@ provides-extras = ["cache", "fastapi", "storages"]
 
 [[package]]
 name = "nucliadb-workspace"
-version = "6.7.1"
+version = "6.7.2"
 source = { virtual = "." }
 dependencies = [
     { name = "nucliadb" },
@@ -3652,6 +3667,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/92/32/587625f91f9a0a3d84688bf9cfc4b2480a7e8ec327cefd0ff2ac891fd2cf/requests-mock-1.12.1.tar.gz", hash = "sha256:e9e12e333b525156e82a3c852f22016b9158220d2f47454de9cae8a77d371401", size = 60901, upload-time = "2024-03-29T03:54:29.446Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/97/ec/889fbc557727da0c34a33850950310240f2040f3b1955175fdb2b36a8910/requests_mock-1.12.1-py2.py3-none-any.whl", hash = "sha256:b1e37054004cdd5e56c84454cc7df12b25f90f382159087f4b6915aaeef39563", size = 27695, upload-time = "2024-03-29T03:54:27.64Z" },
+]
+
+[[package]]
+name = "requests-toolbelt"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f3/61/d7545dafb7ac2230c70d38d31cbfe4cc64f7144dc41f6e4e4b78ecd9f5bb/requests-toolbelt-1.0.0.tar.gz", hash = "sha256:7681a0a3d047012b5bdc0ee37d7f8f07ebe76ab08caeccfc3921ce23c88d5bc6", size = 206888, upload-time = "2023-05-01T04:11:33.229Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3f/51/d4db610ef29373b879047326cbf6fa98b6c1969d6f6dc423279de2b1be2c/requests_toolbelt-1.0.0-py2.py3-none-any.whl", hash = "sha256:cccfdd665f0a24fcf4726e690f65639d272bb0637b9b92dfd91a5568ccf6bd06", size = 54481, upload-time = "2023-05-01T04:11:28.427Z" },
 ]
 
 [[package]]

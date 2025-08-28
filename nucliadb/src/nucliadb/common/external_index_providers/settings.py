@@ -48,5 +48,32 @@ class ExternalIndexProvidersSettings(BaseSettings):
         description="Timeout in seconds for each query operation to Pinecone",
     )
 
+    # MarkLogic settings
+    marklogic_upsert_parallelism: int = Field(
+        default=3,
+        title="MarkLogic upsert parallelism",
+        description="Number of parallel upserts to MarkLogic on each set resource operation",
+    )
+    marklogic_delete_parallelism: int = Field(
+        default=2,
+        title="MarkLogic delete parallelism",
+        description="Number of parallel deletes to MarkLogic on each delete resource operation",
+    )
+    marklogic_upsert_timeout: float = Field(
+        default=10.0,
+        title="MarkLogic upsert timeout",
+        description="Timeout in seconds for each upsert operation to MarkLogic",
+    )
+    marklogic_delete_timeout: float = Field(
+        default=10.0,
+        title="MarkLogic delete timeout",
+        description="Timeout in seconds for each delete operation to MarkLogic",
+    )
+    marklogic_query_timeout: float = Field(
+        default=10.0,
+        title="MarkLogic query timeout",
+        description="Timeout in seconds for each query operation to MarkLogic",
+    )
+
 
 settings = ExternalIndexProvidersSettings()

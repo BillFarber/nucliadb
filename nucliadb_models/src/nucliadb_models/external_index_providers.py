@@ -22,10 +22,12 @@ from pydantic import BaseModel
 class ExternalIndexProviderType(str, Enum):
     """
     Enum for the different external index providers.
-    For now only Pinecone is supported, but we may add more in the future.
+    For now Pinecone and MarkLogic are supported, but we may add more
+    in the future.
     """
 
     PINECONE = "pinecone"
+    MARKLOGIC = "marklogic"
 
 
 class ExternalIndexProviderBase(BaseModel):
@@ -50,4 +52,13 @@ class PineconeIndexProvider(ExternalIndexProviderBase):
     serverless_cloud: PineconeServerlessCloud
 
 
-ExternalIndexProvider = Union[PineconeIndexProvider,]
+class MarkLogicIndexProvider(ExternalIndexProviderBase):
+    type: ExternalIndexProviderType = ExternalIndexProviderType.MARKLOGIC
+    host: str
+    port: int
+    username: str
+    password: str
+    database: str
+
+
+ExternalIndexProvider = Union[PineconeIndexProvider, MarkLogicIndexProvider]

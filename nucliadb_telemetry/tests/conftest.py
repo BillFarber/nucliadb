@@ -13,8 +13,4 @@
 # limitations under the License.
 #
 
-pytest_plugins = [
-    "pytest_docker_fixtures",
-    "nucliadb_utils.tests.nats",
-    "nucliadb_telemetry.tests.telemetry",
-]
+# pytest_plugins definition moved to top-level conftest.py to comply with pytest requirements

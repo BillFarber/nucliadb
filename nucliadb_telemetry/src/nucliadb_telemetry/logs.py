@@ -176,6 +176,9 @@ _default_logger_levels = {
     # some are too chatty
     "uvicorn.error": LogLevel.WARNING,
     "nucliadb_utils.utilities": LogLevel.WARNING,
+    # Enable INFO logging for external index providers
+    "nucliadb.common.external_index_providers.marklogic": LogLevel.INFO,
+    "nucliadb.common.external_index_providers.pinecone": LogLevel.INFO,
 }
 
 
