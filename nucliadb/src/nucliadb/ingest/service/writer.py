@@ -96,14 +96,14 @@ class WriterServicer(writer_pb2_grpc.WriterServicer):
         up to include only necessary fields. It has also been extended to
         support KB creation with multiple vectorsets
         """
-        if is_onprem_nucliadb():
-            logger.error(
-                "Sorry, this endpoint is only available for hosted. Onprem must use the REST API"
-            )
-            return writer_pb2.NewKnowledgeBoxV2Response(
-                status=KnowledgeBoxResponseStatus.ERROR,
-                error_message="This endpoint is only available for hosted. Onprem must use the REST API",
-            )
+        # if is_onprem_nucliadb():
+        #     logger.error(
+        #         "Sorry, this endpoint is only available for hosted. Onprem must use the REST API"
+        #     )
+        #     return writer_pb2.NewKnowledgeBoxV2Response(
+        #         status=KnowledgeBoxResponseStatus.ERROR,
+        #         error_message="This endpoint is only available for hosted. Onprem must use the REST API",
+        #     )
         # Hosted KBs are created through backend endpoints. We assume learning
         # configuration has been already created for it and we are given the
         # model metadata in the request
@@ -182,11 +182,11 @@ class WriterServicer(writer_pb2_grpc.WriterServicer):
     async def DeleteKnowledgeBox(  # type: ignore
         self, request: KnowledgeBoxID, context=None
     ) -> DeleteKnowledgeBoxResponse:
-        if is_onprem_nucliadb():
-            logger.error(
-                "Sorry, this endpoint is only available for hosted. Onprem must use the REST API"
-            )
-            return DeleteKnowledgeBoxResponse(status=KnowledgeBoxResponseStatus.ERROR)
+        # if is_onprem_nucliadb():
+        #     logger.error(
+        #         "Sorry, this endpoint is only available for hosted. Onprem must use the REST API"
+        #     )
+        #     return DeleteKnowledgeBoxResponse(status=KnowledgeBoxResponseStatus.ERROR)
 
         try:
             kbid = request.uuid
